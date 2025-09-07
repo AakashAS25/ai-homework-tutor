@@ -2,30 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Homework Tutor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <div class="chat-bg"></div>
-    <div class="chat-main">
-        <div class="chat-top-bar">
-            <span class="chat-title">AI Homework Tutor</span>
-            <form action="/new_chat" method="post" style="display:inline;">
-                <button type="submit" class="new-chat-btn">New Chat</button>
-            </form>
-        </div>
-        <div class="chat-history" id="chat-history">
+<body class="chat-app">
+    <main class="screen">
+        <div class="messages" id="messages">
             {% for msg in chat_history %}
-                <div class="chat-bubble {{ msg.role }}">
-                    <span class="chat-label">{{ 'You' if msg.role == 'user' else 'Tutor' }}</span>
-                    <div class="chat-text">{{ msg.text|safe }}</div>
+            <div class="message {{ msg.role }}">
+                <div class="avatar" aria-hidden="true">{{ 'Y' if msg.role == 'user' else 'T' }}</div>
+                <div class="bubble">
+                    <div class="text">{{ msg.text|safe }}</div>
                 </div>
+            </div>
             {% endfor %}
         </div>
-        <form action="/" method="post" class="chat-form">
-            <input type="text" name="question" class="chat-input" placeholder="Ask anything..." autocomplete="off" required>
-            <button type="submit" class="send-btn">Send</button>
+
+        <form action="/" method="post" class="composer">
+            <button type="button" class="icon-btn" title="Attach">+</button>
+            <input type="text" name="question" class="input" placeholder="Message.." autocomplete="off" required />
+            <button type="submit" class="send">SEND</button>
         </form>
-    </div>
+    </main>
+
+    <form action="/new_chat" method="post" class="floating-new">
+        <button type="submit" class="pill">New Chat</button>
+    </form>
+
+    <script>
+        // Auto-scroll to latest message
+        const msgEl = document.getElementById('messages');
+        if (msgEl) { msgEl.scrollTop = msgEl.scrollHeight; }
+    </script>
 </body>
 </html>
